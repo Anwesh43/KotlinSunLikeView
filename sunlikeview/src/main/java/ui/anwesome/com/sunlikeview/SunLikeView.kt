@@ -9,13 +9,14 @@ import android.content.*
 import android.graphics.*
 class SunLikeView(ctx : Context) : View(ctx) {
     val paint : Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    val renderer = SunLikeRenderer(this)
     override fun onDraw(canvas : Canvas) {
-
+        renderer.render(canvas, paint)
     }
     override fun onTouchEvent(event : MotionEvent) : Boolean {
         when(event.action) {
             MotionEvent.ACTION_DOWN -> {
-
+                renderer.handleTap()
             }
         }
         return true
@@ -111,6 +112,11 @@ class SunLikeView(ctx : Context) : View(ctx) {
                 sunLike?.update {
                     animator.stop()
                 }
+            }
+        }
+        fun handleTap() {
+            sunLike?.startUpdating {
+                animator.start()
             }
         }
     }
