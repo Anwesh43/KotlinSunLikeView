@@ -10,6 +10,10 @@ import android.graphics.*
 class SunLikeView(ctx : Context) : View(ctx) {
     val paint : Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     val renderer = SunLikeRenderer(this)
+    var sunLikeListener : SunLikeListener ?= null
+    fun addSunLikeListener(onRiseListener : () -> Unit, onSetListener : () -> Unit) {
+        sunLikeListener = SunLikeListener(onRiseListener, onSetListener)
+    }
     override fun onDraw(canvas : Canvas) {
         renderer.render(canvas, paint)
     }
@@ -112,6 +116,10 @@ class SunLikeView(ctx : Context) : View(ctx) {
             animator.animate {
                 sunLike?.update {
                     animator.stop()
+                    when(it) {
+                        0f -> view.sunLikeListener?.onSetListener?.invoke()
+                        1f -> view.sunLikeListener?.onRiseListener?.invoke()
+                    }
                 }
             }
         }
@@ -128,4 +136,5 @@ class SunLikeView(ctx : Context) : View(ctx) {
             return view
         }
     }
+    data class SunLikeListener(var onRiseListener : () -> Unit, var onSetListener : () -> Unit)
 }
