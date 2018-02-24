@@ -91,4 +91,26 @@ class SunLikeView(ctx : Context) : View(ctx) {
             canvas.restore()
         }
     }
+    data class SunLikeRenderer(var view : SunLikeView, var time : Int = 0) {
+        var sunLike : SunLike ?= null
+        val animator = Animator(view)
+        fun render(canvas : Canvas, paint : Paint) {
+            if(time == 0) {
+                val w = canvas.width.toFloat()
+                val h = canvas.height.toFloat()
+                sunLike = SunLike(w, h)
+                paint.strokeWidth = Math.min(w , h)/60
+                paint.strokeCap = Paint.Cap.ROUND
+                paint.color = Color.parseColor("#BF360C")
+            }
+            canvas.drawColor(Color.parseColor("#212121"))
+            sunLike?.draw(canvas, paint)
+            time++
+            animator.animate {
+                sunLike?.update {
+                    animator.stop()
+                }
+            }
+        }
+    }
 }
