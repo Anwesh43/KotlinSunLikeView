@@ -3,6 +3,7 @@ package ui.anwesome.com.sunlikeview
 /**
  * Created by anweshmishra on 24/02/18.
  */
+import android.app.Activity
 import android.view.*
 import android.content.*
 import android.graphics.*
@@ -111,6 +112,13 @@ class SunLikeView(ctx : Context) : View(ctx) {
                     animator.stop()
                 }
             }
+        }
+    }
+    companion object {
+        fun create(activity : Activity):SunLikeView {
+            val view = SunLikeView(activity)
+            activity.setContentView(view)
+            return view
         }
     }
 }
