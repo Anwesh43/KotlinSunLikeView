@@ -66,4 +66,29 @@ class SunLikeView(ctx : Context) : View(ctx) {
             }
         }
     }
+    data class SunLike(var w : Float, var h : Float) {
+        val state = State()
+        fun update(stopcb : (Float) -> Unit) {
+            state.update(stopcb)
+        }
+        fun startUpdating(startcb : () -> Unit) {
+            state.startUpdating(startcb)
+        }
+        fun draw(canvas : Canvas, paint : Paint) {
+            val r = Math.min(w, h) / 3
+            val size = Math.min(w, h) / 15
+            val k = 10
+            val deg = 360f / k
+            canvas.save()
+            canvas.translate(w / 2, h / 2)
+            canvas.drawCircle((h/2 + r) * (1 - state.scales[0]) , 0f, r, paint)
+            for(i in 0 .. k - 1) {
+                canvas.save()
+                canvas.rotate(deg * i)
+                canvas.drawLine( r + size , 0f , r + size + size * state.scales[1], 0f, paint)
+                canvas.restore()
+            }
+            canvas.restore()
+        }
+    }
 }
